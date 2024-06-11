@@ -13,6 +13,8 @@ import { db } from "@/lib/firebase"
 const Home = () => {
 
   const [Doors, setDoors] = useState<Door[]>([]);
+  const [logCount, setLogCount] = useState<number>(0);
+
 
   useEffect(() => {
     const fetchDoors = async () => {
@@ -51,6 +53,19 @@ const Home = () => {
    getUsers()
    },[])
    console.log(users)
+  
+   useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'logs'));
+        setLogCount(querySnapshot.size);
+      } catch (error) {
+        console.error('Error fetching logs: ', error);
+      }
+    };
+
+    fetchLogs();
+  }, []);
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -81,129 +96,13 @@ const Home = () => {
                 <CardDescription>The total number of access events recorded.</CardDescription>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
-                <div className="text-4xl font-bold">2,345</div>
+                <div className="text-4xl font-bold">{logCount}</div>
                 <CalendarIcon className="h-8 w-8 text-gray-500 dark:text-gray-400" />
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Unauthorized Access</CardTitle>
-                <CardDescription>The total number of unauthorized access attempts.</CardDescription>
-              </CardHeader>
-              <CardContent className="flex items-center justify-between">
-                <div className="text-4xl font-bold">12</div>
-                <BadgeAlertIcon className="h-8 w-8 text-gray-500 dark:text-gray-400" />
-              </CardContent>
-            </Card>
+          
           </div>
-          <div className="grid sm:grid-cols-2 gap-4 md:gap-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Access Logs</CardTitle>
-                <CardDescription>The most recent access events recorded.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>User</TableHead>
-                      <TableHead>Door</TableHead>
-                      <TableHead>Time</TableHead>
-                      <TableHead>Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Avatar>
-                            <AvatarImage src="/placeholder-user.jpg" />
-                            <AvatarFallback>JD</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <div className="font-medium">John Doe</div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">johndoe@example.com</div>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>Main Entrance</TableCell>
-                      <TableCell>2:15 PM</TableCell>
-                      <TableCell>
-                        <Badge variant="default">Granted</Badge>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Avatar>
-                            <AvatarImage src="/placeholder-user.jpg" />
-                            <AvatarFallback>SM</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <div className="font-medium">Sarah Miller</div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">sarahmiller@example.com</div>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>Side Entrance</TableCell>
-                      <TableCell>3:45 PM</TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">Granted</Badge>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Avatar>
-                            <AvatarImage src="/placeholder-user.jpg" />
-                            <AvatarFallback>MJ</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <div className="font-medium">Michael Johnson</div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">michaeljohnson@example.com</div>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>Rear Entrance</TableCell>
-                      <TableCell>5:30 PM</TableCell>
-                      <TableCell>
-                        <Badge variant="destructive">Denied</Badge>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Door Activity</CardTitle>
-                <CardDescription>The activity of doors in the access system.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <LineChart className="w-full aspect-[4/3]" />
-              </CardContent>
-            </Card>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4 md:gap-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Top Accessed Doors</CardTitle>
-                <CardDescription>The doors with the most access events.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <BarChart className="w-full aspect-[4/3]" />
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>User Access Trends</CardTitle>
-                <CardDescription>The trend of user access events over time.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <LineChart className="w-full aspect-[4/3]" />
-              </CardContent>
-            </Card>
-          </div>
+          
         </main>
 
   )

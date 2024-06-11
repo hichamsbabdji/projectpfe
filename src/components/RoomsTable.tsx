@@ -1,6 +1,5 @@
 
 import { Table, TableBody, TableHead, TableHeader, TableRow } from './ui/table'
-import DoorsTablerow from './DoorsTablerow';
 import RoomsTableRow from './RoomsTableRow';
 
 export interface Room {

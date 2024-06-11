@@ -12,11 +12,14 @@ import { collection, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { toast } from "@/components/ui/use-toast"
 import { ToastAction } from "@/components/ui/toast"
+import { Log } from "@/components/LogsTable"
 
 export default function Component() {
   const location = useLocation();
   const  navigate = useNavigate()
   const [notification, setNotification] = useState<string[]>(JSON.parse(localStorage.getItem("notification") ?? "[]"));
+  const [log , setLogs] = useState<Log[]>([])
+ 
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'notification'), (snapshot) => {
@@ -34,6 +37,8 @@ export default function Component() {
 
     return () => unsubscribe();
   }, [notification]);
+
+  
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
@@ -43,10 +48,7 @@ export default function Component() {
               <DoorOpenIcon className="h-6 w-6" />
               <span className="">Door Access System</span>
             </Link>
-            <Button className="ml-auto h-8 w-8" size="icon" variant="outline">
-              <BellIcon className="h-4 w-4" />
-              <span className="sr-only">Toggle notifications</span>
-            </Button>
+            
           </div>
           <div className="flex-1 overflow-auto py-2">
             <nav className="grid items-start px-4 text-sm font-medium">
